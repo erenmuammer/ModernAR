@@ -59,7 +59,8 @@ If you happen to create a configuration to support another rig, feel free to sha
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-Copyright (C) Muammer Eren, muammer.eren@tedu.edu.tr
+Original work Copyright (C) Denys Hsu, cgtinker.com. 
+Edited by: BLUESENSE (Contact: muammer.eren@tedu.edu.tr)
 
 
 <br><br>

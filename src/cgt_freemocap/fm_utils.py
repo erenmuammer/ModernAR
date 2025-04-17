@@ -1,5 +1,6 @@
 '''
-Copyright (C) cgtinker, cgtinker.com, muammer.eren@tedu.edu.tr
+Original work Copyright (C) cgtinker, cgtinker.com.
+Edited by: BLUESENSE (Contact: muammer.eren@tedu.edu.tr)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

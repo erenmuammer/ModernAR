@@ -1,7 +1,7 @@
 bl_info = {
     "name":        "ModernAR",
     "description": "ModernAR",
-    "author":      "Muammer Eren",
+    "author":      "BLUESENSE (Contact: muammer.eren@tedu.edu.tr)",
     "version":     (1, 6, 1),
     "blender":     (3, 0, 0),
     "location":    "3D View > Tool",
