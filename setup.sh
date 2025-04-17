@@ -1,6 +1,6 @@
 #!/bin/bash
 
-name="BlendArMocap"
+name="ModernAR"
 
 branch=$(git symbolic-ref --short HEAD)
 version_str=$(grep -r '"version":' __init__.py | tr -d '[a-z,_."(): ]')

@@ -6,8 +6,8 @@ from pathlib import Path
 
 # has to be at root
 PACKAGE = os.path.basename(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
-logging.getLogger("BlendArMocap").debug(f"{PACKAGE}, {os.path.dirname(os.path.dirname(__file__))}")
-ADDON_NAME = "BlendArMocap"
+logging.getLogger("ModernAR").debug(f"{PACKAGE}, {os.path.dirname(os.path.dirname(__file__))}")
+ADDON_NAME = "ModernAR"
 
 
 class CGTDefaultsJson(JsonData):

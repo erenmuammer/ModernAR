@@ -1,11 +1,8 @@
-# BlendArMocap <br>
+# ModernAR <br>
 
-BlendArMocap is a tool preform markerless tracking within Blender using Google’s [Mediapipe](https://google.github.io/mediapipe/). The main goal of the add-on is to efficiently transfer the generated detection results to rigs.<br>
+ModernAR is a tool preform markerless tracking within Blender using Google's [Mediapipe](https://google.github.io/mediapipe/). The main goal of the add-on is to efficiently transfer the generated detection results to rigs.<br>
 
 For more information, please refer to the [documentation](https://cgtinker.github.io/BlendArMocap/).
-
-# Discontinued
-I cannot activly maintain BlendArMocap anymore, I may accept PR's and consider to transfer the ownership if someone plans to activly maintain it.
 
 ### Features
 - Detection of [Mediapipe](https://google.github.io/mediapipe/) detection results in stream or video
@@ -18,14 +15,14 @@ I cannot activly maintain BlendArMocap anymore, I may accept PR's and consider t
 ### Mediapipe Detection
 
 Run Mediapipe within Blender to detect pose, hand, face or holistic features.
-BlendArMocap calculates rotation data based on the detection results at runtime to drive rigs.<br>
+ModernAR calculates rotation data based on the detection results at runtime to drive rigs.<br>
 
 **Caution:** Requires external dependencies which can be installed via the add-on preferences with elevated privileges.
 
 
 ### Freemocap import
 
-[Freemocap](https://freemocap.org) session data can be saved in a `session folder` which then can be imported using BlendArMocap.
+[Freemocap](https://freemocap.org) session data can be saved in a `session folder` which then can be imported using ModernAR.
 To import session data to blender, set the path to the session directory and press the import button.
 
 
@@ -45,7 +42,7 @@ driver_object: generated driver based on instructions
 target_object: copies values from driver_object via constraints
 ````
 
-If you happen to create a configuration to support another rig, feel free to send it to me for sharing via hello@cgtinker.com.<br>
+If you happen to create a configuration to support another rig, feel free to share it.<br>
 
 
 # License
@@ -62,7 +59,7 @@ If you happen to create a configuration to support another rig, feel free to sen
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-Copyright (C) Denys Hsu - cgtinker, cgtinker.com, hello@cgtinker.com
+Copyright (C) Muammer Eren, muammer.eren@tedu.edu.tr
 
 
 <br><br>

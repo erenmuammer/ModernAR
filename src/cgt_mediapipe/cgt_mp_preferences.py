@@ -24,7 +24,7 @@ class PREFERENCES_OT_CGT_install_dependencies_button(bpy.types.Operator):
             for i, dependency in enumerate(cgt_dependencies.required_dependencies):
                 if cgt_dependencies.dependencies_installed[i]:
                     continue
-                user = context.scene.cgtinker_mediapipe  # noqa
+                user = context.scene.modernar_mediapipe_settings  # noqa: Updated name
                 success = cgt_dependencies.install_dependency(self, dependency, user.local_user)
                 cgt_dependencies.dependencies_installed[i] = success
 
@@ -66,7 +66,7 @@ class PREFERENCES_OT_CGT_save_preferences(bpy.types.Operator):
 
     def execute(self, context):
         from .cgt_mp_registration import MP_ATTRS
-        user = bpy.context.scene.cgtinker_mediapipe  # noqa
+        user = bpy.context.scene.modernar_mediapipe_settings  # noqa: Updated name
         cgt_user_prefs.set_prefs(**{attr: getattr(user, attr, default) for attr, default in MP_ATTRS.items()})
         self.report({'INFO'}, "Saved user preferences.")
         return {"FINISHED"}
@@ -76,7 +76,7 @@ def draw(self, context):
 
     """ Dependency layout for user preferences. """
     layout = self.layout
-    user = context.scene.cgtinker_mediapipe  # noqa
+    user = context.scene.modernar_mediapipe_settings  # noqa: Updated name
 
     # dependency box
     dependency_box = layout.box()
@@ -146,13 +146,31 @@ classes = [
     PREFERENCES_OT_CGT_uninstall_dependencies_button
 ]
 
+_registered_classes = [] # Keep track
 
 def register():
+    global _registered_classes
+    _registered_classes = []
+    # Register classes
     for cls in classes:
-        bpy.utils.register_class(cls)
-    cgt_core_panel.addon_prefs.add(draw)
-
+        if not hasattr(bpy.types, cls.__name__):
+            try:
+                bpy.utils.register_class(cls)
+                _registered_classes.append(cls)
+            except Exception as e:
+                print(f"Failed to register class {cls.__name__}: {e}")
+        else:
+            _registered_classes.append(cls)
+    # DO NOT add draw function here anymore
+    # cgt_core_panel.addon_prefs.add(draw)
 
 def unregister():
-    for cls in reversed(classes):
-        bpy.utils.unregister_class(cls)
+    global _registered_classes
+    for cls in reversed(_registered_classes):
+        try:
+            bpy.utils.unregister_class(cls)
+        except RuntimeError:
+            pass
+        except Exception as e:
+            print(f"Error unregistering class {cls.__name__}: {e}")
+    _registered_classes = []

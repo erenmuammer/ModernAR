@@ -96,7 +96,7 @@ class WM_CGT_MP_modal_detection_operator(bpy.types.Operator):
 
     def execute(self, context):
         """ Runs movie or stream detection depending on user input. """
-        self.user = getattr(context.scene, "cgtinker_mediapipe")
+        self.user = getattr(context.scene, "modernar_mediapipe_settings")
         assert self.user is not None
 
         # don't activate if modal is running
@@ -141,7 +141,6 @@ class WM_CGT_MP_modal_detection_operator(bpy.types.Operator):
         def addable(x, y):
             # check if [int, [float, float float]]
             if not isinstance(x, list) or not isinstance(y, list):
-                print("CATCHED NOT LIST ERR")
                 return False
 
             if not len(x) == 2 or not len(y) == 2:

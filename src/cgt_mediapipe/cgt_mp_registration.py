@@ -29,14 +29,14 @@ MP_ATTRS = {
 
 @bpy.app.handlers.persistent
 def save_preferences(*args):
-    user = bpy.context.scene.cgtinker_mediapipe  # noqa
+    user = bpy.context.scene.modernar_mediapipe_settings  # noqa: Updated name
     cgt_user_prefs.set_prefs(**{attr: getattr(user, attr, default) for attr, default in MP_ATTRS.items()})
 
 
 @bpy.app.handlers.persistent
 def load_preferences(*args):
     stored_preferences = cgt_user_prefs.get_prefs(**MP_ATTRS)
-    user = bpy.context.scene.cgtinker_mediapipe # noqa
+    user = bpy.context.scene.modernar_mediapipe_settings # noqa: Updated name
     for property_name, value in stored_preferences.items():
         if not hasattr(user, property_name):
             logging.warning(f"{property_name} - not available.")

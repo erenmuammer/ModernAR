@@ -45,7 +45,7 @@ class UI_PT_CGT_Panel_Freemocap(bpy.types.Panel):
     def draw(self, context):
         layout = self.layout
 
-        user = context.scene.cgtinker_freemocap  # noqa
+        user = context.scene.modernar_freemocap_settings  # noqa
         layout.row().prop(user, "freemocap_session_path")
         if not user.quickload:
             self.load_session_folder(user)
@@ -66,17 +66,56 @@ classes = [
     UI_PT_CGT_Panel_Freemocap,
 ]
 
+_registered_classes = [] # Keep track of what this module registered
+_property_registered = False # Keep track of the property
 
 def register():
-    for cls in classes:
-        bpy.utils.register_class(cls)
-    bpy.types.Scene.cgtinker_freemocap = bpy.props.PointerProperty(type=UI_PT_CGT_Properties_Freemocap)
+    global _registered_classes, _property_registered
+    _registered_classes = [] # Reset on register attempt
+    _property_registered = False
 
+    # Register classes
+    for cls in classes:
+        if not hasattr(bpy.types, cls.__name__): # Check if NOT already registered by name
+            try:
+                bpy.utils.register_class(cls)
+                _registered_classes.append(cls) # Add to our list only if successful
+            except Exception as e:
+                print(f"Failed to register class {cls.__name__}: {e}")
+        else:
+            # If already registered, assume it might be ours, add to list for unregister attempt
+            _registered_classes.append(cls)
+
+    # Register PointerProperty
+    if not hasattr(bpy.types.Scene, 'modernar_freemocap_settings'):
+        try:
+            bpy.types.Scene.modernar_freemocap_settings = bpy.props.PointerProperty(type=UI_PT_CGT_Properties_Freemocap)
+            _property_registered = True
+        except Exception as e:
+             print(f"Failed to register PointerProperty 'modernar_freemocap_settings': {e}")
+    # else: # Property already exists
+    #     print("PointerProperty 'modernar_freemocap_settings' already exists.")
 
 def unregister():
-    for cls in reversed(classes):
-        bpy.utils.unregister_class(cls)
-    del bpy.types.Scene.cgtinker_freemocap # noqa
+    global _registered_classes, _property_registered
+
+    # Unregister PointerProperty first
+    if hasattr(bpy.types.Scene, 'modernar_freemocap_settings'):
+        try:
+            del bpy.types.Scene.modernar_freemocap_settings
+            _property_registered = False
+        except Exception as e:
+            print(f"Failed to delete scene property 'modernar_freemocap_settings': {e}")
+
+    # Unregister classes
+    for cls in reversed(_registered_classes):
+         try:
+             bpy.utils.unregister_class(cls)
+         except RuntimeError:
+             pass
+         except Exception as e:
+             print(f"Unexpected error unregistering class {cls.__name__}: {e}")
+    _registered_classes = []
 
 
 if __name__ == '__main__':

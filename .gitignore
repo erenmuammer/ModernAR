@@ -138,3 +138,6 @@ dmypy.json
 /src/cgt_tests/data/
 /src/test.py
 /BlendArMocap_release_160.zip
+
+# Vendored dependencies
+/vendor/

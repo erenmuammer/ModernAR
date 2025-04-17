@@ -122,14 +122,62 @@ classes = [
     MP_PG_Properties,
 ]
 
+_registered_classes = [] # Keep track of what this module registered
+_property_registered = False # Keep track of the property
 
 def register():
+    global _registered_classes, _property_registered
+    _registered_classes = [] # Reset on register attempt
+    _property_registered = False
+
+    # Register classes first (PointerProperty needs the type registered)
     for cls in classes:
-        bpy.utils.register_class(cls)
-    bpy.types.Scene.cgtinker_mediapipe = bpy.props.PointerProperty(type=MP_PG_Properties)
+        if not hasattr(bpy.types, cls.__name__): # Check if NOT already registered by name
+            try:
+                bpy.utils.register_class(cls)
+                _registered_classes.append(cls) # Add to our list only if successful
+            except Exception as e:
+                print(f"Failed to register class {cls.__name__}: {e}")
+        else:
+            # If already registered, assume it might be ours, add to list for unregister attempt
+            # A more robust system might check __module__ but this is simpler
+            _registered_classes.append(cls) 
+            # print(f"Class {cls.__name__} appears to be already registered.")
+
+    # Register PointerProperty
+    if not hasattr(bpy.types.Scene, 'modernar_mediapipe_settings'):
+        try:
+            bpy.types.Scene.modernar_mediapipe_settings = bpy.props.PointerProperty(type=MP_PG_Properties)
+            _property_registered = True
+        except Exception as e:
+             print(f"Failed to register PointerProperty 'modernar_mediapipe_settings': {e}")
+    # else: # Property already exists
+    #     print("PointerProperty 'modernar_mediapipe_settings' already exists.")
 
 
 def unregister():
-    for cls in reversed(classes):
-        bpy.utils.unregister_class(cls)
-    del bpy.types.Scene.cgtinker_mediapipe
+    global _registered_classes, _property_registered
+
+    # Unregister PointerProperty first (classes might be referenced)
+    if hasattr(bpy.types.Scene, 'modernar_mediapipe_settings'):
+        # Optional: Check if _property_registered is True before deleting?
+        # Might prevent issues if another script registered it.
+        try:
+            del bpy.types.Scene.modernar_mediapipe_settings
+            _property_registered = False
+        except Exception as e:
+            print(f"Failed to delete scene property 'modernar_mediapipe_settings': {e}")
+
+    # Unregister classes that *this module* tried to register, in reverse order
+    for cls in reversed(_registered_classes):
+         try:
+             # We attempt unregister even if we didn't register it, 
+             # because if it failed registration before, it might exist from a previous addon load.
+             # A more complex system could track success/failure better.
+             bpy.utils.unregister_class(cls)
+         except RuntimeError:
+             # This often means it was already unregistered, ignore.
+             pass
+         except Exception as e:
+             print(f"Unexpected error unregistering class {cls.__name__}: {e}")
+    _registered_classes = [] # Clear the list

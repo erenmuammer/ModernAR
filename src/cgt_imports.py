@@ -1,8 +1,22 @@
+import sys
+import os
+from pathlib import Path
+
+# Add vendor directory to sys.path
+VENDOR_DIR = Path(__file__).parent.parent / "vendor"
+if VENDOR_DIR.is_dir():
+    # Add vendor directory first to avoid potential conflicts with system packages
+    if str(VENDOR_DIR) not in sys.path:
+        sys.path.insert(0, str(VENDOR_DIR))
+else:
+    print(f"ModernAR Warning: Vendor directory not found at {VENDOR_DIR}")
+
+
 import importlib
 import logging
-import sys
-from typing import Optional
-from pathlib import Path
+# sys is already imported above
+# from typing import Optional # This seems unused in the snippet shown, can be kept or removed based on full file context
+# from pathlib import Path # Path is already imported above
 
 # Ensure all modules are reloaded from new files,
 # when the addon is removed and a new version is installed in the same session,
